@@ -124,4 +124,12 @@ def score_lin(X_train, X_test, y_train, y_test):
     return y_pred
 
 #Modelling
+#Predicting the registered users
 score_lin(x_train_reg,x_test_reg,y_train_reg,y_test_reg)
+
+#Predicting the casual users
+score_lin(x_train_casual,x_test_casual,y_train_casual,y_test_casual)
+
+#Predicting total count
+score_lin(x_train_count,x_test_count,y_train_count,y_test_count)
+
