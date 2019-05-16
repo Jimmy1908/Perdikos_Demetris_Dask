@@ -55,19 +55,83 @@ hour_data=hour_data.drop('dteday',axis=1)
 display(hour_data.head())
 
 #Normalize the data
-ss=StandardScaler()
-norm=ss.fit_transform(hour_data.drop(['season','year','month','hour','holiday','weekday','workingday','weather','day',
-                                     'casual','registered','count'],axis=1))
-cat=hour_data.loc[:,['season','year','month','hour','holiday','weekday','workingday','weather','day',
-                     'casual','registered','count']]
-hour_data=dd.concat([cat,norm],axis=1)
+ss = StandardScaler()
+norm = ss.fit_transform(
+    hour_data.drop(
+        [
+            "season",
+            "year",
+            "month",
+            "hour",
+            "holiday",
+            "weekday",
+            "workingday",
+            "weather",
+            "day",
+            "casual",
+            "registered",
+            "count",
+        ],
+        axis=1,
+    )
+)
+cat = hour_data.loc[
+    :,
+    [
+        "season",
+        "year",
+        "month",
+        "hour",
+        "holiday",
+        "weekday",
+        "workingday",
+        "weather",
+        "day",
+        "casual",
+        "registered",
+        "count",
+    ],
+]
+hour_data = dd.concat([cat, norm], axis=1)
 
 
 #One-Hot Encode Categorical Variables
+hour_data_cl = hour_data.copy()
 pipe = make_pipeline(
     Categorizer(), DummyEncoder())
 
 hour_data_cl=pipe.fit_transform(hour_data_cl)
+
+#Rename columns
+hour_data_cl.rename(
+    columns={
+        "holiday_0": "no_holiday",
+        "holiday_1": "yes_holiday",
+        "month_1": "jan",
+        "month_2": "feb",
+        "month_3": "mar",
+        "month_4": "apr",
+        "month_5": "may",
+        "month_6": "jun",
+        "month_7": "jul",
+        "month_8": "aug",
+        "month_9": "sep",
+        "month_10": "oct",
+        "month_11": "nov",
+        "month_12": "dec",
+        "weekday_0": "sun",
+        "weekday_1": "mon",
+        "weekday_2": "tue",
+        "weekday_3": "wed",
+        "weekday_4": "thu",
+        "weekday_5": "fri",
+        "weekday_6": "sat",
+        "season_1": "winter",
+        "season_2": "spring",
+        "season_3": "summer",
+        "season_4": "autumn",
+    }
+)
 
 
 #Function to split time series data
