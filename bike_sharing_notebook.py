@@ -141,3 +141,8 @@ baseline_cnt
 
 #Summing Registered and Casual predictions
 pred_summed = baseline_reg + baseline_cas
+
+#define scoring function to compare 2 approaches
+def mae_score(x,y):
+    s = mean_absolute_error(x,y)
+    return s
