@@ -46,3 +46,10 @@ hour_data=hour_data.rename(
         "cnt": "count",
         "yr": "year",
     })
+
+
+#Change Date Format
+hour_data.dteday = dd.to_datetime(hour_data.dteday, format="%Y-%m-%d")
+hour_data["day"] = hour_data["dteday"].dt.day
+hour_data=hour_data.drop('dteday',axis=1)
+display(hour_data.head())
