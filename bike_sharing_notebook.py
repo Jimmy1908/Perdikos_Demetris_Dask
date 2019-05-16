@@ -18,7 +18,6 @@ from dask_ml.model_selection import train_test_split
 from dask_ml.linear_model import LinearRegression
 from dask_ml.metrics import mean_absolute_error
 from dask_ml.metrics import mean_squared_error
-from dask_ml.metrics import r2_score
 from sklearn.metrics import r2_score
 
 #Data loading
@@ -151,3 +150,5 @@ def mae_score(x,y):
 
 #score 
 mae_score( y_test_count ,pred_summed)
+
+r2_score( y_test_count.compute() ,pred_summed.compute())
