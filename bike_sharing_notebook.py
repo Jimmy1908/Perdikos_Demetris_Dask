@@ -19,6 +19,7 @@ from dask_ml.linear_model import LinearRegression
 from dask_ml.metrics import mean_absolute_error
 from dask_ml.metrics import mean_squared_error
 from dask_ml.metrics import r2_score
+from sklearn.metrics import r2_score
 
 #Data loading
 day_data = dd.read_csv(
@@ -122,6 +123,7 @@ def score_lin(X_train, X_test, y_train, y_test):
     print("Coefficients:", lm.coef_)
     print("Mean squared error (MSE): {:.2f}".format(mean_squared_error(y_test, y_pred)))
     print("Mean absolute error (MSE): {:.2f}".format(mean_absolute_error(y_test, y_pred)))
+    print("Variance score (R2): {:.2f}".format(r2_score(y_test.compute(), y_pred.compute())))
 
     return y_pred
 
