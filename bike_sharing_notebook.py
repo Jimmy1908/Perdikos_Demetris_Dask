@@ -53,3 +53,11 @@ hour_data.dteday = dd.to_datetime(hour_data.dteday, format="%Y-%m-%d")
 hour_data["day"] = hour_data["dteday"].dt.day
 hour_data=hour_data.drop('dteday',axis=1)
 display(hour_data.head())
+
+#Normalize the data
+ss=StandardScaler()
+norm=ss.fit_transform(hour_data.drop(['season','year','month','hour','holiday','weekday','workingday','weather','day',
+                                     'casual','registered','count'],axis=1))
+cat=hour_data.loc[:,['season','year','month','hour','holiday','weekday','workingday','weather','day',
+                     'casual','registered','count']]
+hour_data=dd.concat([cat,norm],axis=1)
