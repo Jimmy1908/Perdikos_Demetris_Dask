@@ -61,3 +61,10 @@ norm=ss.fit_transform(hour_data.drop(['season','year','month','hour','holiday','
 cat=hour_data.loc[:,['season','year','month','hour','holiday','weekday','workingday','weather','day',
                      'casual','registered','count']]
 hour_data=dd.concat([cat,norm],axis=1)
+
+
+#One-Hot Encode Categorical Variables
+pipe = make_pipeline(
+    Categorizer(), DummyEncoder())
+
+hour_data_cl=pipe.fit_transform(hour_data_cl)
