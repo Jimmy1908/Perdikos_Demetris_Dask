@@ -138,4 +138,4 @@ baseline_cnt
 #2)Predict the final count directly
 
 #Summing Registered and Casual predictions
-
+pred_summed = baseline_reg + baseline_cas
