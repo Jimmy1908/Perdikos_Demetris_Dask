@@ -95,3 +95,20 @@ x_train_casual=x_train_casual.drop(['registered','count'],axis=1)
 x_test_casual=x_test_casual.drop(['registered','count'],axis=1)
 x_train_count=x_train_count.drop(['registered','casual'],axis=1)
 x_test_count=x_test_count.drop(['registered','casual'],axis=1)
+
+
+#tranform into dask array to be used in ML algorithms
+x_train_reg=x_train_reg.values
+x_test_reg=x_test_reg.values
+y_train_reg=y_train_reg.values
+y_test_reg=y_test_reg.values
+
+x_train_casual=x_train_casual.values
+x_test_casual=x_test_casual.values
+y_train_casual=y_train_casual.values
+y_test_casual=y_test_casual.values
+
+x_train_count=x_train_count.values
+x_test_count=x_test_count.values
+y_train_count=y_train_count.values
+y_test_count=y_test_count.values
