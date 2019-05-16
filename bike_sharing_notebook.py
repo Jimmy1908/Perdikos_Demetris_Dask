@@ -83,3 +83,15 @@ def split_data(dataset, Target):
     )
     return X_train, X_test, y_train, y_test
 
+#Split the Dataset with 3 different targets (Registered, Casual, Count)
+x_train_reg, x_test_reg, y_train_reg, y_test_reg = split_data(hour_data_cl, "registered")
+x_train_casual, x_test_casual, y_train_casual, y_test_casual = split_data(hour_data_cl, "casual")
+x_train_count, x_test_count, y_train_count, y_test_count = split_data(hour_data_cl, "count")
+
+#drop target
+x_train_reg=x_train_reg.drop(['casual','count'],axis=1)
+x_test_reg=x_test_reg.drop(['casual','count'],axis=1)
+x_train_casual=x_train_casual.drop(['registered','count'],axis=1)
+x_test_casual=x_test_casual.drop(['registered','count'],axis=1)
+x_train_count=x_train_count.drop(['registered','casual'],axis=1)
+x_test_count=x_test_count.drop(['registered','casual'],axis=1)
