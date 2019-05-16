@@ -133,3 +133,9 @@ score_lin(x_train_casual,x_test_casual,y_train_casual,y_test_casual)
 #Predicting total count
 score_lin(x_train_count,x_test_count,y_train_count,y_test_count)
 
+#The approach here was to try 2 ways of modelling:
+#1)Predict Registered and Casual customers individually and independently and then sum the results
+#2)Predict the final count directly
+
+#Summing Registered and Casual predictions
+
