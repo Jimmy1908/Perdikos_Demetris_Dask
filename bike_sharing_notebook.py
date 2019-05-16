@@ -121,6 +121,8 @@ def score_lin(X_train, X_test, y_train, y_test):
     print("Intercept:", lm.intercept_)
     print("Coefficients:", lm.coef_)
     print("Mean squared error (MSE): {:.2f}".format(mean_squared_error(y_test, y_pred)))
+    print("Mean absolute error (MSE): {:.2f}".format(mean_absolute_error(y_test, y_pred)))
+
     return y_pred
 
 #Modelling
