@@ -146,3 +146,6 @@ pred_summed = baseline_reg + baseline_cas
 def mae_score(x,y):
     s = mean_absolute_error(x,y)
     return s
+
+#score 
+mae_score( y_test_count ,pred_summed)
