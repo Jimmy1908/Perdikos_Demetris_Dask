@@ -68,3 +68,18 @@ pipe = make_pipeline(
     Categorizer(), DummyEncoder())
 
 hour_data_cl=pipe.fit_transform(hour_data_cl)
+
+
+#Function to split time series data
+def split_data(dataset, Target):
+    X = dataset.loc[:, dataset.columns != Target]
+    y = dataset.loc[:, Target]
+    train_size = int(len(dataset) * 0.875)
+    X_train, X_test, y_train, y_test = (
+        X.loc[0:train_size],
+        X.loc[train_size : len(dataset)],
+        y.loc[0:train_size],
+        y.loc[train_size : len(dataset)],
+    )
+    return X_train, X_test, y_train, y_test
+
