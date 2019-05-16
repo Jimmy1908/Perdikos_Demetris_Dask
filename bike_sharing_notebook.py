@@ -34,3 +34,15 @@ location_data = dd.read_csv(
     "https://gist.githubusercontent.com/geraldwal/3aba0d1a34965e2e59e1b6bf37e0bd91/raw/0266a0f936f2e1e75495d2e351090e80b49c107a/LocationsCapitalBikeStations%2520-%2520Python%2520Group",
     sep=","
 )
+
+
+#Rename Columns
+hour_data=hour_data.rename(
+    columns={
+        "weathersit": "weather",
+        "mnth": "month",
+        "hr": "hour",
+        "hum": "humidity",
+        "cnt": "count",
+        "yr": "year",
+    })
