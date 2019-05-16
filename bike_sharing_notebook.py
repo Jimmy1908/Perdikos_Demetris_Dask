@@ -125,14 +125,14 @@ def score_lin(X_train, X_test, y_train, y_test):
 
 #Modelling
 #Predicting the registered users
-score_lin(x_train_reg,x_test_reg,y_train_reg,y_test_reg)
-
+baseline_reg=score_lin(x_train_reg,x_test_reg,y_train_reg,y_test_reg)
+baseline_reg
 #Predicting the casual users
-score_lin(x_train_casual,x_test_casual,y_train_casual,y_test_casual)
-
+baseline_cas=score_lin(x_train_casual,x_test_casual,y_train_casual,y_test_casual)
+baseline_cas
 #Predicting total count
-score_lin(x_train_count,x_test_count,y_train_count,y_test_count)
-
+baseline_cnt=score_lin(x_train_count,x_test_count,y_train_count,y_test_count)
+baseline_cnt
 #The approach here was to try 2 ways of modelling:
 #1)Predict Registered and Casual customers individually and independently and then sum the results
 #2)Predict the final count directly
