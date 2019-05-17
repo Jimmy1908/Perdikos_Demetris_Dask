@@ -3,6 +3,7 @@ import dask.dataframe as dd
 import numpy as np
 import pandas as pd
 import dask.bag as db
+import matplotlib.pyplot as plt
 from dask.distributed import client
 from sklearn import preprocessing
 import dask.array as da
@@ -53,6 +54,33 @@ hour_data.dteday = dd.to_datetime(hour_data.dteday, format="%Y-%m-%d")
 hour_data["day"] = hour_data["dteday"].dt.day
 hour_data=hour_data.drop('dteday',axis=1)
 display(hour_data.head())
+
+#Exploratory Data Analysis
+fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(18, 5))
+
+ax1 = axs[0]
+ax1.scatter(
+    hour_data["temp"].compute(),
+    hour_data["casual"].compute(),
+    c=hour_data["temp"].compute(),
+    cmap="RdYlBu_r",
+)
+ax1.set_xlabel("Temperature")
+ax1.set_ylabel("Casually Rented Bikes")
+ax1.set_title("Casual Bike Users vs Temperature")
+
+ax2 = axs[1]
+ax2.scatter(
+    hour_data["atemp"].compute(),
+    hour_data["casual"].compute(),
+    c=hour_data["atemp"].compute(),
+    cmap="RdYlBu_r",
+)
+ax2.set_xlabel("Felt temperature")
+ax2.set_ylabel("Casually Rented Bikes")
+ax2.set_title("Casual Bike Users vs Felt Temperature")
+
+plt.show()
 
 #Normalize the data
 ss = StandardScaler()
