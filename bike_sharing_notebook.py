@@ -20,6 +20,9 @@ from dask_ml.linear_model import LinearRegression
 from dask_ml.metrics import mean_absolute_error
 from dask_ml.metrics import mean_squared_error
 from sklearn.metrics import r2_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 #Data loading
 day_data = dd.read_csv(
@@ -200,6 +203,61 @@ ax2.set_title("Registered v/s humidity")
 plt.show()
 
 
+#Histograms
+#Number of casual bikes rented per season: Both graphs compare bike rental per season during year 1 and year 2,
+#showing fall is the season with higher number of casual bikes rentals. The season with lowest rentals is spring.
+plt.figure(figsize=(11, 5))
+sns.barplot(
+    "year",
+    "casual",
+    hue="season",
+    data=hour_data.compute(),
+    palette="rainbow",
+    ci=None,
+    estimator=sum,
+)
+plt.legend(["Spring", "Summer", "Fall", "Winter"], loc="upper left")
+plt.xlabel("Year")
+plt.ylabel("Total number of bikes rented on Casual basis")
+plt.title("Number of casual bikes rented per season")
+
+plt.show()
+
+
+#Number of registered bikes rented per season: Both graphs compare registered bike rental per season during year 1 and year 2,
+#showing fall is the season with higher number of casual bikes rentals. The season with lowest rentals is spring.
+
+plt.figure(figsize=(11, 5))
+sns.barplot(
+    "year",
+    "registered",
+    hue="season",
+    data=hour_data.compute(),
+    palette="rainbow",
+    ci=None,
+)
+plt.legend(["Spring", "Summer", "Fall", "Winter"], loc="upper left")
+plt.xlabel("Year")
+plt.ylabel("Total number of bikes rented on registered basis")
+plt.title("Number of registered bikes rented per season")
+
+
+plt.show()
+
+#Correlation Matrix: Highly correlated variables are:
+#Windspeed and humidity Casual and humidity Registered and humidity Count and humidity
+
+corrMatt = hour_data[
+    ["temp", "atemp", "humidity", "windspeed", "casual", "registered", "count"]
+].corr()
+
+mask = np.array(corrMatt)
+# Turning the lower-triangle of the array to false
+mask[np.tril_indices_from(mask)] = False
+fig, ax = plt.subplots()
+sns.heatmap(corrMatt, mask=mask, vmax=0.8, square=True, annot=True, ax=ax)
+
+plt.show()
 
 #Normalize the data
 ss = StandardScaler()
