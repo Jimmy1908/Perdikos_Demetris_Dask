@@ -137,6 +137,70 @@ plt.show()
 
 
 
+
+#Scatter Plots
+#Casual vs Windspeed
+#Registered vs Windspeed
+#Both plots mentioned above show an decreasing trend of bicycle use when the windspeed is increasing (both casual and registered bikes).
+
+fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(18, 5))
+
+ax1 = axs[0]
+ax1.scatter(
+    hour_data["windspeed"].compute(),
+    hour_data["casual"].compute(),
+    c=hour_data["windspeed"].compute(),
+    cmap="autumn_r",
+)
+ax1.set_xlabel("windspeed")
+ax1.set_ylabel("Casually Rented Bikes")
+ax1.set_title("Casual v/s windspeed")
+
+ax2 = axs[1]
+ax2.scatter(
+    hour_data["windspeed"].compute(),
+    hour_data["registered"].compute(),
+    c=hour_data["windspeed"].compute(),
+    cmap="autumn_r",
+)
+ax2.set_xlabel("windspeed")
+ax2.set_ylabel("Registered Rented Bikes")
+ax2.set_title("Registered v/s windspeed")
+
+plt.show()
+
+
+#Scatter Plots
+#Registered vs Humidity: Registered bikes use decrease as humidity increases.
+#Casual vs Humidity: Casual bikes use is steady even when humidity increases.
+fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(18, 5))
+
+ax1 = axs[0]
+ax1.scatter(
+    hour_data["humidity"].compute(),
+    hour_data["casual"].compute(),
+    c=hour_data["humidity"].compute(),
+    cmap="Blues",
+)
+ax1.set_xlabel("Humidity")
+ax1.set_ylabel("Casually Rented Bikes")
+ax1.set_title("Casual v/s humidity")
+
+ax2 = axs[1]
+ax2.scatter(
+    hour_data["humidity"].compute(),
+    hour_data["registered"].compute(),
+    c=hour_data["humidity"].compute(),
+    cmap="Blues",
+)
+ax2.set_xlabel("Humidity")
+ax2.set_ylabel("Registered Rented Bikes")
+ax2.set_title("Registered v/s humidity")
+
+plt.show()
+
+
+
 #Normalize the data
 ss = StandardScaler()
 norm = ss.fit_transform(
