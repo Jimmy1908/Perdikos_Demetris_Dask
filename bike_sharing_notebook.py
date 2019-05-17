@@ -82,6 +82,33 @@ ax2.set_title("Casual Bike Users vs Felt Temperature")
 
 plt.show()
 
+
+fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(18, 5))
+
+ax1 = axs[0]
+ax1.scatter(
+    hour_data["temp"].compute(),
+    hour_data["registered"].compute(),
+    c=hour_data["temp"].compute(),
+    cmap="RdYlBu_r",
+)
+ax1.set_xlabel("Temperature")
+ax1.set_ylabel("Registered Rented Bikes")
+ax1.set_title("Registered Bike Users vs Temperature")
+
+ax2 = axs[1]
+ax2.scatter(
+    hour_data["atemp"].compute(),
+    hour_data["registered"].compute(),
+    c=hour_data["atemp"].compute(),
+    cmap="RdYlBu_r",
+)
+ax2.set_xlabel("Felt temperature")
+ax2.set_ylabel("Registered Rented Bikes")
+ax2.set_title("Registered Bike Users vs Felt Temperature")
+
+plt.show()
+
 #Normalize the data
 ss = StandardScaler()
 norm = ss.fit_transform(
