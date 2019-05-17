@@ -56,6 +56,14 @@ hour_data=hour_data.drop('dteday',axis=1)
 display(hour_data.head())
 
 #Exploratory Data Analysis
+
+#Scatter Plots
+#Casual Bike Users vs Temperature
+#Casual Bike Users vs Felt Temperature
+#Registered Bike Users vs Temperature
+#Registered Bike Users vs Felt Temperature
+
+
 fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(18, 5))
 
 ax1 = axs[0]
@@ -108,6 +116,26 @@ ax2.set_ylabel("Registered Rented Bikes")
 ax2.set_title("Registered Bike Users vs Felt Temperature")
 
 plt.show()
+
+
+
+#Trend
+
+fig, ax = plt.subplots(1)
+ax.plot(sorted(hour_data["casual"].compute()), c="b", marker="*", label="casual")
+ax.plot(
+    sorted(hour_data["registered"].compute()),
+    c="#EE273A",
+    marker="*",
+    label="registered",
+)
+ax.legend(loc="upper left")
+ax.set_ylabel("Sorted Rental Counts", fontsize=10)
+fig.suptitle("Recorded Bike Rental Counts", fontsize=10)
+
+plt.show()
+
+
 
 #Normalize the data
 ss = StandardScaler()
