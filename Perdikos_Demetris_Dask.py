@@ -260,6 +260,108 @@ sns.heatmap(corrMatt, mask=mask, vmax=0.8, square=True, annot=True, ax=ax)
 
 plt.show()
 
+
+
+#Correlation Matrix: Highly correlated variables are:
+#Count and registered Year and Instant Count and casual
+
+plt.figure(figsize=(20, 5))
+mask = np.zeros_like(hour_data.corr().compute(), dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+sns.heatmap(hour_data.corr().compute(), cmap="RdBu_r", mask=mask, annot=True)
+
+plt.show()
+
+
+
+
+#sns.Pointplots
+#1) Use of the system by total users; hourly distribution, split to weekdays: Show peak hours at 8am and 5pm, office hours.
+#2) Use of the system by casual users; hourly distribution, split to weekdays: Show most activity between 9am and 8pm.
+#3) Use of the system by registered users; hourly distribution, split to weekdays: Show peak hours at 8am and 5pm, office hours.
+
+
+plt.figure(figsize=(14, 4))
+weekday_hr_gb = (
+    hour_data.compute()
+    .groupby(["weekday", "hour"])
+    .mean()["count"]
+    .reset_index(drop=False)
+)
+g = sns.pointplot(x="hour", y="count", hue="weekday", data=weekday_hr_gb)
+g_legend = g.axes.get_legend()
+g_labels = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+]
+for t, l in zip(g_legend.texts, g_labels):
+    t.set_text(l)
+plt.title("Use of the system total; hourly distribution, split to weekdays")
+plt.show()
+
+
+plt.figure(figsize=(14, 4))
+weekday_hr_gb = (
+    hour_data.compute()
+    .groupby(["weekday", "hour"])
+    .mean()["casual"]
+    .reset_index(drop=False)
+)
+g = sns.pointplot(x="hour", y="casual", hue="weekday", data=weekday_hr_gb)
+g_legend = g.axes.get_legend()
+g_labels = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+]
+for t, l in zip(g_legend.texts, g_labels):
+    t.set_text(l)
+plt.title("Use of the system by casual users; hourly distribution, split to weekdays")
+plt.show()
+print(
+    "weekdays- no real peaks, increase within the day. weekends- peaks are during the day"
+)
+
+plt.figure(figsize=(14, 4))
+weekday_hr_gb = (
+    hour_data.compute()
+    .groupby(["weekday", "hour"])
+    .mean()["registered"]
+    .reset_index(drop=False)
+)
+g = sns.pointplot(x="hour", y="registered", hue="weekday", data=weekday_hr_gb)
+g_legend = g.axes.get_legend()
+g_labels = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+]
+for t, l in zip(g_legend.texts, g_labels):
+    t.set_text(l)
+plt.title(
+    "Use of the system by registered users; hourly distribution, split to weekdays"
+)
+plt.show()
+print(
+    "weekdays- peaks are mornings and evenings. weekends- peaks are during the day, nearly similar to count"
+)
+
+
+
+
 #Normalize the data
 ss = StandardScaler()
 norm = ss.fit_transform(
