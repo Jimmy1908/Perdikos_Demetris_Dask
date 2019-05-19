@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import dask.bag as db
 import matplotlib.pyplot as plt
-from dask.distributed import client
+from dask.distributed import Client
 from sklearn import preprocessing
 import dask.array as da
 import dask.array.stats
@@ -23,6 +23,7 @@ from sklearn.metrics import r2_score
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+client = Client()
 
 #Data loading
 day_data = dd.read_csv(
@@ -421,3 +422,27 @@ def mae_score(x,y):
 mae_score( y_test_count ,pred_summed)
 
 r2_score( y_test_count.compute() ,pred_summed.compute())
+
+
+#XGBoost apprach
+#A new scoring function is created in order to try a new approach
+def score_xgb(X_train, X_test, y_train, y_test):
+    est = XGBRegressor()
+    est.fit(X_train, y_train)
+    y_pred = est.predict(X_test)
+    print("Mean squared error (MSE): {:.2f}".format(mean_squared_error(y_test, y_pred)))
+    print(
+        "Mean absolute error (MSE): {:.2f}".format(mean_absolute_error(y_test, y_pred))
+    )
+    print(
+        "Variance score (R2): {:.2f}".format(
+            r2_score(y_test.compute(), y_pred.compute())
+        )
+    )
+    return y_pred
+
+#score the model
+baseline_reg = score_xgb(x_train_reg, x_test_reg, y_train_reg, y_test_reg)
+baseline_reg
+
+
