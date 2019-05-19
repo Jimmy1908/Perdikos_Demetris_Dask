@@ -22,7 +22,7 @@ from dask_ml.metrics import mean_squared_error
 from sklearn.metrics import r2_score
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+from dask_ml.xgboost import XGBRegressor
 client = Client()
 
 #Data loading
@@ -204,6 +204,108 @@ ax2.set_title("Registered v/s humidity")
 plt.show()
 
 
+#Bar Chart
+#Total Casual Bikes Rentals per Daily Hour: Increasing trend in bikes rental after 7am, decrease starts after 6pm.
+#Total Registered Bikes Rentals per Daily Hour: Increasing trend in bikes rental after 6am, decrease starts after 8pm.
+
+ax1 = (
+    hour_data.compute()[["hour", "casual"]]
+    .groupby(["hour"])
+    .sum()
+    .reset_index()
+    .plot(
+        kind="bar",
+        figsize=(8, 6),
+        legend=False,
+        title="Total Casual Bike Rentals by Hour",
+        color="#EE273A",
+        fontsize=12,
+    )
+)
+ax1.set_xlabel("Hour", fontsize=12)
+ax1.set_ylabel("Casual", fontsize=12)
+
+ax2 = (
+    hour_data.compute()[["hour", "registered"]]
+    .groupby(["hour"])
+    .sum()
+    .reset_index()
+    .plot(
+        kind="bar",
+        figsize=(8, 6),
+        legend=False,
+        title="Total Registered Bike Rentals by Hour",
+        color="#EE273A",
+        fontsize=12,
+    )
+)
+ax2.set_xlabel("Hour", fontsize=12)
+ax2.set_ylabel("Registered", fontsize=12)
+
+plt.show()
+
+
+
+
+#Bar Charts
+#Bike Rentals by Season: Highest number of casual bikes rented in fall, followed by summer and winter respectively.
+#Bike Rentals by Weathersit: Highest number of casual bikes renter during clear weathersit.
+
+f, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(15, 5))
+
+ax1 = (
+    hour_data.compute()[["season", "casual"]]
+    .groupby(["season"])
+    .sum()
+    .reset_index()
+    .plot(
+        kind="bar",
+        legend=False,
+        title="Bike Rentals by season",
+        stacked=True,
+        fontsize=12,
+        ax=ax1,
+        color="#EE273A",
+    )
+)
+ax1.set_xlabel("season", fontsize=12)
+ax1.set_ylabel("Casual Count", fontsize=12)
+ax1.set_xticklabels(["spring", "summer", "fall", "winter"])
+
+
+ax2 = (
+    hour_data.compute()[["weather", "casual"]]
+    .groupby(["weather"])
+    .sum()
+    .reset_index()
+    .plot(
+        kind="bar",
+        legend=False,
+        stacked=True,
+        title="Bike Rentals by weathersit",
+        fontsize=12,
+        ax=ax2,
+        color="#EE273A",
+    )
+)
+
+ax2.set_xlabel("weather", fontsize=12)
+ax2.set_ylabel("Casual Count", fontsize=12)
+ax2.set_xticklabels(["1: Clear", "2: Mist", "3: Light Snow", "4: Heavy Rain"])
+
+f.tight_layout
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
 #Histograms
 #Number of casual bikes rented per season: Both graphs compare bike rental per season during year 1 and year 2,
 #showing fall is the season with higher number of casual bikes rentals. The season with lowest rentals is spring.
@@ -269,6 +371,34 @@ plt.figure(figsize=(20, 5))
 mask = np.zeros_like(hour_data.corr().compute(), dtype=np.bool)
 mask[np.triu_indices_from(mask)] = True
 sns.heatmap(hour_data.corr().compute(), cmap="RdBu_r", mask=mask, annot=True)
+
+plt.show()
+
+
+#Bar Charts
+#Monthly Distribution (Registered)
+#Monthly Distribution (Casual)
+#Months with highest number of rentals (casual and registered) are May to October, yearly decrease starts in November.
+
+fig, ax = plt.subplots()
+sns.barplot(
+    data=hour_data.compute()[["month", "registered"]],
+    x="month",
+    y="registered",
+    ax=ax,
+    estimator=sum,
+)
+ax.set(title="Monthly distribution")
+
+fig, ax = plt.subplots()
+sns.barplot(
+    data=hour_data.compute()[["month", "casual"]],
+    x="month",
+    y="casual",
+    ax=ax,
+    estimator=sum,
+)
+ax.set(title="Monthly distribution")
 
 plt.show()
 
@@ -358,6 +488,128 @@ plt.show()
 print(
     "weekdays- peaks are mornings and evenings. weekends- peaks are during the day, nearly similar to count"
 )
+
+
+#Histograms
+#1) Humidity Histogram
+#2) Humidity Histogram with quantiles: Frequency increases as humidity increases
+#3) Temperature Histogram
+#4) Temperature Histogram with quantiles: Frequency increases in second and third quantiles, and decrease starts on fourth quantile
+#5) Felt Temperature Histogram
+#6) Felt Temperature Histogram with quantiles: Frequency increases in second and third quantiles, and decrease starts on fourth quantile
+#7) Windspeed Histogram
+#8) Windspeed Histogram with quantiles: Increase in first quantile, and subtle decrease until fourth quantile.
+
+#1
+quantile_list = [0, 0.25, 0.5, 0.75, 1.0]
+
+fig, ax = plt.subplots()
+hour_data.compute()["humidity"].hist(
+    bins=30, color="#A9C5D3", edgecolor="black", grid=False
+)
+ax.set_title("Humidity Histogram", fontsize=12)
+ax.set_xlabel("Humidity", fontsize=12)
+ax.set_ylabel("Frequency", fontsize=12)
+
+plt.show()
+
+#2
+quantiles = hour_data.compute()["humidity"].quantile(quantile_list)
+
+fig, ax = plt.subplots()
+hour_data.compute()["humidity"].hist(
+    bins=30, color="#A9C5D3", edgecolor="black", grid=False
+)
+for quantile in quantiles:
+    qvl = plt.axvline(quantile, color="#EE273A")
+ax.legend([qvl], ["Quantiles"], fontsize=10)
+ax.set_title("Humidity Histogram with Quantiles", fontsize=12)
+ax.set_xlabel("Humidity", fontsize=12)
+ax.set_ylabel("Frequency", fontsize=12)
+
+plt.show()
+
+#3
+fig, ax = plt.subplots()
+hour_data.compute()["temp"].hist(
+    bins=30, color="#A9C5D3", edgecolor="black", grid=False
+)
+ax.set_title("Temperature Histogram", fontsize=12)
+ax.set_xlabel("Temperature", fontsize=12)
+ax.set_ylabel("Frequency", fontsize=12)
+
+plt.show()
+
+#4
+quantiles = hour_data.compute()["temp"].quantile(quantile_list)
+
+fig, ax = plt.subplots()
+hour_data.compute()["temp"].hist(
+    bins=30, color="#A9C5D3", edgecolor="black", grid=False
+)
+for quantile in quantiles:
+    qvl = plt.axvline(quantile, color="#EE273A")
+ax.legend([qvl], ["Quantiles"], fontsize=10)
+ax.set_title("Temperature Histogram with Quantiles", fontsize=12)
+ax.set_xlabel("Temperature", fontsize=12)
+ax.set_ylabel("Frequency", fontsize=12)
+
+plt.show()
+
+#5
+fig, ax = plt.subplots()
+hour_data.compute()["atemp"].hist(
+    bins=30, color="#A9C5D3", edgecolor="black", grid=False
+)
+ax.set_title("Felt Temperature Histogram", fontsize=12)
+ax.set_xlabel("Felt Temp", fontsize=12)
+ax.set_ylabel("Frequency", fontsize=12)
+
+plt.show()
+
+#6
+quantiles = hour_data.compute()["atemp"].quantile(quantile_list)
+
+fig, ax = plt.subplots()
+hour_data.compute()["atemp"].hist(
+    bins=30, color="#A9C5D3", edgecolor="black", grid=False
+)
+for quantile in quantiles:
+    qvl = plt.axvline(quantile, color="#EE273A")
+ax.legend([qvl], ["Quantiles"], fontsize=10)
+ax.set_title("Felt Temperature Histogram with Quantiles", fontsize=12)
+ax.set_xlabel("Felt Temperature", fontsize=12)
+ax.set_ylabel("Frequency", fontsize=12)
+
+plt.show()
+
+#7
+fig, ax = plt.subplots()
+hour_data.compute()["windspeed"].hist(
+    bins=30, color="#A9C5D3", edgecolor="black", grid=False
+)
+ax.set_title("Windspeed Histogram", fontsize=12)
+ax.set_xlabel("Windspeed", fontsize=12)
+ax.set_ylabel("Frequency", fontsize=12)
+
+plt.show()
+
+#8
+quantiles = hour_data.compute()["windspeed"].quantile(quantile_list)
+
+fig, ax = plt.subplots()
+hour_data.compute()["windspeed"].hist(
+    bins=30, color="#A9C5D3", edgecolor="black", grid=False
+)
+for quantile in quantiles:
+    qvl = plt.axvline(quantile, color="#EE273A")
+ax.legend([qvl], ["Quantiles"], fontsize=10)
+ax.set_title("Windspeed Temperature Histogram with Quantiles", fontsize=12)
+ax.set_xlabel("Windspeed", fontsize=12)
+ax.set_ylabel("Frequency", fontsize=12)
+
+plt.show()
+
 
 
 
